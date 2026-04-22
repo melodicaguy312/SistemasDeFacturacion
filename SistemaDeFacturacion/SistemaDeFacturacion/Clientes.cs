@@ -33,14 +33,14 @@ public class Clientes
         }
     }
 
-    public static void Modificar(string valor, string nombre, string apellidos, string direccion, int telefono, string mail)
+    public static void Modificar(string valor, int id)
     {
         using (var conexion = Conexion.Conectar())
         {
             string cadenaSQL = @"UPDATE clientes SET valor = @valor WHERE id = @id;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
-                
+                //...
             }
         }
         
