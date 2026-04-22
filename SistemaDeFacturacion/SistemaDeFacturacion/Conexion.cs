@@ -6,7 +6,7 @@ public class Conexion
 {
     public static SqliteConnection Conectar()
     {
-        string ruta = Path.Combine(AppContext.BaseDirectory, "bbdd", "tienda.db");
+        string ruta = @"C:\Users\ismat\Documents\SistemasDeFacturacion\SistemaDeFacturacion\SistemaDeFacturacion\bbdd\tienda.db";
         string connString = $"Data Source={ruta}";
         SqliteConnection conn = new SqliteConnection(connString);
         

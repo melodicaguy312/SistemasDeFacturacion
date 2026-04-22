@@ -35,12 +35,32 @@ public class Clientes
 
     public static void Modificar(string valor, int id)
     {
+        string[] columnasPermitidas = {"nombre", "apellidos", "direccion", "telefono", "mail"};
+        foreach (var columna in columnasPermitidas)
+        {
+            if (valor.Contains(columna))
+            {
+                Console.WriteLine("Dato inválido.");
+                return;
+            }
+        }
         using (var conexion = Conexion.Conectar())
         {
             string cadenaSQL = @"UPDATE clientes SET valor = @valor WHERE id = @id;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
-                //...
+                comando.Parameters.AddWithValue("@valor", valor);
+                comando.Parameters.AddWithValue("@id", id);
+                
+                int filasActualizadas = comando.ExecuteNonQuery();
+                if (filasActualizadas > 0)
+                {
+                    Console.WriteLine($"Filas modificadas {filasActualizadas}.");
+                }
+                else
+                {
+                    Console.WriteLine($"No se han modificado las filas.");
+                }
             }
         }
         
