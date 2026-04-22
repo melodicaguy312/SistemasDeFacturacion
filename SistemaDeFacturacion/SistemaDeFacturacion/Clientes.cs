@@ -33,20 +33,19 @@ public class Clientes
         }
     }
 
-    public static void Modificar(string valor, int id)
+    public static void Modificar(string columna, string valor, int id)
     {
-        string[] columnasPermitidas = {"nombre", "apellidos", "direccion", "telefono", "mail"};
-        foreach (var columna in columnasPermitidas)
-        {
-            if (valor.Contains(columna))
+        string[] columnasPermitidas = { "nombre", "apellidos", "direccion", "telefono", "mail" };
+        
+            if (!columnasPermitidas.Contains(columna))
             {
-                Console.WriteLine("Dato inválido.");
+                Console.WriteLine("Columna inválida.");
                 return;
             }
-        }
+            
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = @"UPDATE clientes SET valor = @valor WHERE id = @id;";
+            string cadenaSQL = @"UPDATE clientes SET @columna = @valor WHERE id = @id;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@valor", valor);
