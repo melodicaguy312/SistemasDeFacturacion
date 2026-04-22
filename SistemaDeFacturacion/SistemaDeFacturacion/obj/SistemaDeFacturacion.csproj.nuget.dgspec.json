@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dam.A14PC44\\Desktop\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj": {}
+    "C:\\Users\\dam.A14PC43\\Documents\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dam.A14PC44\\Desktop\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj": {
+    "C:\\Users\\dam.A14PC43\\Documents\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dam.A14PC44\\Desktop\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj",
+        "projectUniqueName": "C:\\Users\\dam.A14PC43\\Documents\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj",
         "projectName": "SistemaDeFacturacion",
-        "projectPath": "C:\\Users\\dam.A14PC44\\Desktop\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj",
-        "packagesPath": "C:\\Users\\dam.A14PC44\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dam.A14PC44\\Desktop\\SistemaDeFacturacion\\SistemaDeFacturacion\\obj\\",
+        "projectPath": "C:\\Users\\dam.A14PC43\\Documents\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj",
+        "packagesPath": "C:\\Users\\dam.A14PC43\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dam.A14PC43\\Documents\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dam.A14PC44\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dam.A14PC43\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -78,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\dam.A14PC44\\.dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\dam.A14PC43\\.dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
