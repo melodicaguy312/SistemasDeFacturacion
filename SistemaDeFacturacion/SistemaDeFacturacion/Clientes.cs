@@ -10,27 +10,26 @@ public class Clientes
         using (var conexion = Conexion.Conectar())
         {
             string cadenaSQL = @"INSERT INTO clientes(nombre, apellidos, direccion, telefono, mail) VALUES(@nombre, @apellidos, @direccion, @telefono, @mail)";
-
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@nombre", nombre);
                 comando.Parameters.AddWithValue("@apellidos", apellidos);
                 comando.Parameters.AddWithValue("@direccion", direccion);
-                comando.Parameters.AddWithValue("@telefono", telefono);
+                if (string.IsNullOrWhiteSpace(telefono.ToString()))
+                {
+                    comando.Parameters.AddWithValue("@telefono", DBNull.Value);
+                }
+                else
+                {
+                    comando.Parameters.AddWithValue("@telefono", telefono);
+                }
+
                 comando.Parameters.AddWithValue("@mail", mail);
                 
                 comando.ExecuteNonQuery();
             }
             Console.WriteLine();
             Console.WriteLine("Cliente añadido correctamente.");
-        }
-    }
-
-    public static void Modificar(string nombre, string apellidos, string direccion, int telefono, string mail)
-    {
-        using (var conexion = Conexion.Conectar())
-        {
-            
         }
     }
 
