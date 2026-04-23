@@ -45,7 +45,7 @@ public class Clientes
             
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = @"UPDATE clientes SET @columna = @valor WHERE id = @id;";
+            string cadenaSQL = $"UPDATE clientes SET {columna} = @valor WHERE id = @id;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@valor", valor);

@@ -25,7 +25,7 @@ class Program
                         {
                             case 1:
                                 Console.Clear();
-                                Clientes cliente = new Clientes();
+                                Clientes clienteInsertar = new Clientes();
                                 
                                 string nombre_cliente;
                                 string apellidos_cliente;
@@ -47,6 +47,20 @@ class Program
                                 Clientes.Insertar(nombre_cliente, apellidos_cliente, direccion_cliente, telefono_cliente, mail);
                                 break;
                             case 2:
+                                Console.Clear();
+                                Clientes clienteModificar = new Clientes();
+
+                                string columna, valor;
+                                int id;
+                                
+                                Console.Write("Columna que quiere cambiar (nombre, apellidos, direccion, telefono, mail): ");
+                                columna = Console.ReadLine();
+                                Console.Write("Valor nuevo: ");
+                                valor = Console.ReadLine();
+                                Console.Write("Donde la ID sea: ");
+                                id = Convert.ToInt32(Console.ReadLine());
+                                
+                                Clientes.Modificar(columna, valor, id);
                                 break;
                             case 3:
                                 break;
