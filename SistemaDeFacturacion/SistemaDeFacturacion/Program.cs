@@ -21,6 +21,7 @@ class Program
                     entrada_cliente = Console.ReadLine();
                     if (int.TryParse(entrada_cliente, out int opcion_cliente))
                     {
+                        // while
                         switch (opcion_cliente)
                         {
                             case 1:
@@ -63,16 +64,21 @@ class Program
                                 Clientes.Modificar(columna, valor, id);
                                 break;
                             case 3:
+                                // Eliminar
                                 break;
                             case 4:
+                                // Listado
                                 Console.Clear();
                                 Clientes.MostrarTodos();
                                 break;
                             case 5:
+                                // Buscar cliente por ID
                                 break;
                             case 6:
+                                // Facturas de cliente por ID del cliente
                                 break;
                             case 0:
+                                // Volver al menú principal
                                 break;
                         }
                     }
