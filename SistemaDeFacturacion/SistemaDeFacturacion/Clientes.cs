@@ -99,7 +99,7 @@ public class Clientes
                     if (contador % 20 == 0)
                     {
                         Console.WriteLine();
-                        Console.WriteLine("Pulse cualquier tecla para continuar o 's' para salir del listado.");
+                        Console.WriteLine("Introduzca cualquier letra para continuar o 's' para salir del listado.");
                         string opcion = Console.ReadLine().ToLower();
                         if (opcion == "s") break;
                     }

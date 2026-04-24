@@ -6,7 +6,7 @@ class Program
     {
         string entrada;
         Menu.Menu_Principal();
-        Console.SetCursorPosition(8, 6);
+        Console.SetCursorPosition(8, 10);
         entrada = Console.ReadLine();
         if (int.TryParse(entrada, out int opcion))
         {
