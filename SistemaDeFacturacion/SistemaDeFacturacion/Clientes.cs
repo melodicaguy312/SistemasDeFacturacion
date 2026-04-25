@@ -123,7 +123,7 @@ public class Clientes
 
             Console.WriteLine();
             Console.WriteLine($"El cliente con ID {id} tiene {totalFacturas} facturas.");
-            Console.Write("¿Estas seguro de que quieres eliminar al cliente y todas sus facturas? (s/n): ");
+            Console.WriteLine("¿Estas seguro de que quieres eliminar al cliente y todas sus facturas? (s/n): ");
             string respuesta = Console.ReadLine().ToLower();
 
             if (respuesta != "s")
@@ -190,6 +190,29 @@ public class Clientes
                         Console.WriteLine($"No se ha encontrado ningun cliente con el ID: {id}");
                     }
                 }
+            }
+        }
+    }
+    
+    public static void TotalArticulosVendidosPorCodigo(int codigo_producto)
+    {
+        using (var conexion = Conexion.Conectar())
+        {
+            string cadenaSQL = "SELECT SUM(cantidad) FROM lineas_factura WHERE cod_producto = @id;";
+        
+            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            {
+                comando.Parameters.AddWithValue("@codigo_producto", codigo_producto);
+            
+                var suma = comando.ExecuteScalar();
+            
+                int totalVendidos = 0;
+
+                if (suma != DBNull.Value || suma != null)
+                {
+                    totalVendidos = Convert.ToInt32(suma);
+                }
+                Console.WriteLine($"El artículo con codigo_producto {codigo_producto} ha vendido un total de: {totalVendidos} unidades.");
             }
         }
     }
