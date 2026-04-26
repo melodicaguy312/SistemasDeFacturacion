@@ -11,7 +11,7 @@ public class Conexion
         SqliteConnection conn = new SqliteConnection(connString);
         
         conn.Open();
-        Console.WriteLine("Conexión abierta en: " + ruta);
+        Console.WriteLine("Conexión abierta en: " + ruta + "\n");
         return conn;
     }
 }

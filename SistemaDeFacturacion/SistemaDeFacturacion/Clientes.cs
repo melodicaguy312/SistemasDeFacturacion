@@ -5,7 +5,7 @@ public class Clientes
 {
     
     // INSERTAR
-    public static void Insertar(string nombre, string apellidos, string direccion, int telefono, string mail)
+    public static void Insertar(string nombre, string apellidos, string direccion, int? telefono, string mail)
     {
         using (var conexion = Conexion.Conectar())
         {
@@ -30,6 +30,7 @@ public class Clientes
             }
             Console.WriteLine();
             Console.WriteLine("Cliente añadido correctamente.");
+            Console.ReadKey();
         }
     }
 
@@ -40,6 +41,7 @@ public class Clientes
             if (!columnasPermitidas.Contains(columna.ToLower()))
             {
                 Console.WriteLine("Columna inválida.");
+                Console.ReadKey();
                 return;
             }
             
@@ -56,17 +58,17 @@ public class Clientes
                 if (filasActualizadas > 0)
                 {
                     Console.WriteLine($"Filas modificadas {filasActualizadas}.");
+                    Console.ReadKey();
                 }
                 else
                 {
                     Console.WriteLine($"No se han modificado las filas.");
+                    Console.ReadKey();
                 }
             }
         }
-        
     }
-
-    // MOSTRAR TODOS
+    
     public static void MostrarTodos()
     {
         using (var conexion = Conexion.Conectar())
@@ -104,6 +106,9 @@ public class Clientes
                         if (opcion == "s") break;
                     }
                 }
+                Console.WriteLine();
+                Console.WriteLine("Introduzca cualquier letra para salir del listado.");
+                Console.ReadKey(true);
             }
         }
     }
@@ -112,6 +117,19 @@ public class Clientes
     {
         using (var conexion = Conexion.Conectar())
         {
+            string sqlExiste = "SELECT COUNT(*) FROM clientes WHERE id = @id;";
+            using (var comandoExiste = new SqliteCommand(sqlExiste, conexion))
+            {
+                comandoExiste.Parameters.AddWithValue("@id", id);
+                int existe = Convert.ToInt32(comandoExiste.ExecuteScalar());
+
+                if (existe == 0)
+                {
+                    Console.WriteLine($"No existe ningún cliente con ID {id}.");
+                    Console.ReadKey(true);
+                    return;
+                }
+            }
             string sqlContar = "SELECT COUNT(*) FROM facturas WHERE id_cliente = @id;";
             int totalFacturas = 0;
 
@@ -124,29 +142,36 @@ public class Clientes
             Console.WriteLine();
             Console.WriteLine($"El cliente con ID {id} tiene {totalFacturas} facturas.");
             Console.WriteLine("¿Estas seguro de que quieres eliminar al cliente y todas sus facturas? (s/n): ");
-            string respuesta = Console.ReadLine().ToLower();
-
-            if (respuesta != "s")
+            string respuesta;
+            respuesta = Console.ReadLine().ToLower();
+            
+            if (respuesta == "n")
             {
                 Console.WriteLine("Cancelado.");
+                Console.ReadKey(true);
                 return;
             }
-
-            string cadenaSQL = "DELETE FROM clientes WHERE id = @id;";
-            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            
+            if (respuesta == "s")
             {
-                comando.Parameters.AddWithValue("@id", id);
+                string cadenaSQL = "DELETE FROM clientes WHERE id = @id;";
+                using (var comando = new SqliteCommand(cadenaSQL, conexion))
+                {
+                    comando.Parameters.AddWithValue("@id", id);
                 
-                int filasActualizadas = comando.ExecuteNonQuery();
-                if (filasActualizadas > 0)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine($"Filas Eliminadas {filasActualizadas}.");
-                    Console.WriteLine($"Se eliminaron {totalFacturas} facturas del cliente.");
-                }
-                else
-                {
-                    Console.WriteLine("No se han eliminado las filas.");
+                    int filasActualizadas = comando.ExecuteNonQuery();
+                    if (filasActualizadas > 0)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine($"Filas Eliminadas {filasActualizadas}.");
+                        Console.WriteLine($"Se eliminaron {totalFacturas} facturas del cliente.");
+                        Console.ReadKey(true);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se han eliminado las filas.");
+                        Console.ReadKey(true);
+                    }
                 }
             }
         }
