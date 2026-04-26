@@ -30,12 +30,12 @@ public class Menu
         Console.WriteLine("Productos");
         Console.WriteLine("########");
         Console.ResetColor();
-        Console.WriteLine("1 - Alta de artículo");
-        Console.WriteLine("2 - Modificar artículo");
-        Console.WriteLine("3 - Eliminar artículo");
-        Console.WriteLine("4 - Listado de todos los artículos");
-        Console.WriteLine("5 - Buscar artículo por ID");
-        Console.WriteLine("6 - Número total de artículos vendidos por ID de artículo");
+        Console.WriteLine("1 - Alta de producto");
+        Console.WriteLine("2 - Modificar producto");
+        Console.WriteLine("3 - Eliminar producto");
+        Console.WriteLine("4 - Listado de todos los productos");
+        Console.WriteLine("5 - Buscar producto por ID");
+        Console.WriteLine("6 - Número total de productos vendidos por ID de producto");
         Console.WriteLine("0 - Volver al menú principal");
         Console.WriteLine("##############################");
         Console.WriteLine("Opción: ");
@@ -84,7 +84,7 @@ public class Menu
         Console.WriteLine("Empresa: TECH X");
         Console.WriteLine("CIF: K223784609");
         Console.WriteLine("1 - Clientes");
-        Console.WriteLine("2 - Artículos");
+        Console.WriteLine("2 - Productos");
         Console.WriteLine("3 - Facturas");
         Console.WriteLine("0 - Salir");
         Console.WriteLine("##############################");
