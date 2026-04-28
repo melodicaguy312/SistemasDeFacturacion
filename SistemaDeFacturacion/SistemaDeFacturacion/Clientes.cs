@@ -9,7 +9,7 @@ public class Clientes
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = @"INSERT INTO clientes(nombre, apellidos, direccion, telefono, mail) VALUES(@nombre, @apellidos, @direccion, @telefono, @mail);";
+            string cadenaSQL = "INSERT INTO clientes(nombre, apellidos, direccion, telefono, mail) VALUES(@nombre, @apellidos, @direccion, @telefono, @mail);";
             
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {

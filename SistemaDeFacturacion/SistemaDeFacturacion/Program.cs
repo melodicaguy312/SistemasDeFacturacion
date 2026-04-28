@@ -25,7 +25,7 @@ class Program
                         while (!salir_cliente)
                         {
                             Menu.Menu_Cliente();
-                            Console.SetCursorPosition(8, 11);
+                            //Console.SetCursorPosition(8, 11);
                             entrada_cliente = Console.ReadLine();
 
                             if (int.TryParse(entrada_cliente, out int opcion_cliente))
@@ -107,7 +107,7 @@ class Program
                         while (!salir_productos)
                         {
                             Menu.Menu_Productos();
-                            Console.SetCursorPosition(8, 11);
+                            //Console.SetCursorPosition(8, 11);
                             entrada_productos = Console.ReadLine();
                             if (int.TryParse(entrada_productos, out int opcion_producto))
                             {
@@ -140,6 +140,31 @@ class Program
                         }
                         break;
                     case 3:
+                        Console.Clear();
+                        string entrada_facturas;
+                        bool salir_facturas = false;
+                        while (!salir_facturas)
+                        {
+                            Menu.Menu_Facturas();
+                            entrada_facturas = Console.ReadLine();
+                            if (int.TryParse(entrada_facturas, out int opcion_facturas))
+                            {
+                                switch (opcion_facturas)
+                                {
+                                    case 1:
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 3:
+                                        break;
+                                    case 4:
+                                        break;
+                                    case 0:
+                                        salir_facturas = true;
+                                        break;
+                                }
+                            }
+                        }
                         break;
                     case 0:
                         salir_principal = true;

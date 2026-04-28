@@ -9,7 +9,7 @@ public class Productos
         using (var conexion = Conexion.Conectar())
         {
             string cadenaSQL = "SELECT * FROM productos";
-            string cabecera = $"{"CODIGO_PRODUCTO",-4} | {"Nombre_Producto",-20} | {"Precio_Unitario",-20} |\n";
+            string cabecera = $"{"Codigo Producto",-4} | {"Nombre Producto",-20} | {"Precio Unitario",-20} |\n";
             int contador = 0;
             Console.WriteLine(cabecera);
 
@@ -61,7 +61,7 @@ public class Productos
 
     public static void Modificar(string columna, string valor, int codigo_producto)
     {
-        string[] columnasPermitidas = { "codigo_producto", "nombre_producto", "precio_unitario" };
+        string[] columnasPermitidas = { "nombre_producto", "precio_unitario" };
 
         if (!columnasPermitidas.Contains(columna.ToLower()))
         {
