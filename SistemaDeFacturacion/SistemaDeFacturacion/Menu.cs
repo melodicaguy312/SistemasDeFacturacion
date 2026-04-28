@@ -18,8 +18,7 @@ public class Menu
         Console.WriteLine("6 - Facturas de cliente por ID de cliente");
         Console.WriteLine("0 - Volver al menú principal");
         Console.WriteLine("##############################");
-        Console.WriteLine("Opción: ");
-        Console.WriteLine("###############################");
+        Console.Write("Opción: ");
     }
 
     public static void Menu_Productos()
@@ -38,8 +37,7 @@ public class Menu
         Console.WriteLine("6 - Número total de productos vendidos por ID de producto");
         Console.WriteLine("0 - Volver al menú principal");
         Console.WriteLine("##############################");
-        Console.WriteLine("Opción: ");
-        Console.WriteLine("###############################");
+        Console.Write("Opción: ");
     }
     
     public static void Menu_Facturas()
@@ -56,22 +54,9 @@ public class Menu
         Console.WriteLine("4 - Visualizar factura");
         Console.WriteLine("0 - Volver al menú principal");
         Console.WriteLine("##############################");
-        Console.WriteLine("Opción: ");
-        Console.WriteLine("###############################");
+        Console.Write("Opción: ");
+
     }
-    
-    /* ##################################################
-    # SISTEMA DE FACTURACIÓN #
-    ##################################################
-    Empresa: LOS CLAVOS DE CRISTO
-    CIF: B00121109
-    1) Clientes
-    2) Artículos
-    3) Facturas
-    0) Salir
-    Opción:
-    ###################################################
-*/
     
     public static void Menu_Principal()
     {
@@ -88,7 +73,6 @@ public class Menu
         Console.WriteLine("3 - Facturas");
         Console.WriteLine("0 - Salir");
         Console.WriteLine("##############################");
-        Console.WriteLine("Opción: ");
-        Console.WriteLine("###############################");
+        Console.Write("Opción: ");
     }
 }

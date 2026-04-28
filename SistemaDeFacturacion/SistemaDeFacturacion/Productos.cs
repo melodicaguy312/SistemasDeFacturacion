@@ -46,7 +46,7 @@ public class Productos
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = @"INSERT INTO clientes(nombre_producto, precio_unitario) VALUES(@nombre_producto, @precio_unitario)";
+            string cadenaSQL = @"INSERT INTO productos(nombre_producto, precio_unitario) VALUES(@nombre_producto, @precio_unitario)";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@nombre_producto", nombre_producto);
@@ -71,7 +71,7 @@ public class Productos
 
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = $"UPDATE clientes SET {columna} = @valor WHERE codigo_producto = @codigo_producto;";
+            string cadenaSQL = $"UPDATE productos SET {columna} = @valor WHERE codigo_producto = @codigo_producto;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@valor", valor);
@@ -157,8 +157,9 @@ public class Productos
                     if (reader.Read())
                     {
                         cod_producto = reader.GetInt32(0);
-                        precio_unitario = reader.GetDouble(1);
-                        nombre_producto = reader.GetString(2);
+                        nombre_producto = reader.GetString(1);
+                        precio_unitario = reader.GetDouble(2);
+                        
                         
                         Console.WriteLine();
                         Console.WriteLine("--- PRODUCTO ENCONTRADO ---");
@@ -173,6 +174,29 @@ public class Productos
                         Console.WriteLine($"No se ha encontrado ningun producto con el codigo de producto: {codigo_producto}");
                     }
                 }
+            }
+        }
+    }
+    
+    public static void TotalArticulosVendidosPorCodigo(int codigo_producto)
+    {
+        using (var conexion = Conexion.Conectar())
+        {
+            string cadenaSQL = "SELECT SUM(cantidad) FROM lineas_factura WHERE cod_producto = @codigo_producto;";
+        
+            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            {
+                comando.Parameters.AddWithValue("@codigo_producto", codigo_producto);
+            
+                var suma = comando.ExecuteScalar();
+            
+                int totalVendidos = 0;
+
+                if (suma != DBNull.Value && suma != null)
+                {
+                    totalVendidos = Convert.ToInt32(suma);
+                }
+                Console.WriteLine($"El artículo con codigo_producto {codigo_producto} ha vendido un total de: {totalVendidos} unidades.");
             }
         }
     }

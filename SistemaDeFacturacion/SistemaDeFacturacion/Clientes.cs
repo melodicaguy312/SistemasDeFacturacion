@@ -219,27 +219,40 @@ public class Clientes
         }
     }
     
-    public static void TotalArticulosVendidosPorCodigo(int codigo_producto)
+    public static void FacturasAsociadasAClientePorId(int id_cliente)
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = "SELECT SUM(cantidad) FROM lineas_factura WHERE cod_producto = @id;";
-        
+            string cadenaSQL = "SELECT id_factura,codigo_factura,fecha FROM facturas WHERE id_cliente = @id_cliente";
+            int id_factura;
+            string codigo_factura, fecha;
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
-                comando.Parameters.AddWithValue("@codigo_producto", codigo_producto);
-            
-                var suma = comando.ExecuteScalar();
-            
-                int totalVendidos = 0;
+                comando.Parameters.AddWithValue("@id_cliente", id_cliente);
 
-                if (suma != DBNull.Value || suma != null)
+                using (var reader = comando.ExecuteReader())
                 {
-                    totalVendidos = Convert.ToInt32(suma);
+                    if (reader.Read())
+                    {
+                        id_factura = reader.GetInt32(0);
+                        codigo_factura = reader.GetString(1);
+                        fecha = reader.GetString(2);
+                        
+                        
+                        Console.WriteLine();
+                        Console.WriteLine("--- FACTURAS ASOCIADAS DE CLIENTE ENCONTRADAS ---");
+                        Console.WriteLine($"{"ID:",-12} {id_factura}");
+                        Console.WriteLine($"{"Codigo Factura:",-12} {codigo_factura}");
+                        Console.WriteLine($"{"Fecha:",-12} {fecha}");
+                        Console.WriteLine("--------------------------");
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine($"No se ha encontrado ninguna factura asociada con el cliente con el ID: {id_cliente}");
+                    }
                 }
-                Console.WriteLine($"El artículo con codigo_producto {codigo_producto} ha vendido un total de: {totalVendidos} unidades.");
             }
         }
     }
-    
 }
