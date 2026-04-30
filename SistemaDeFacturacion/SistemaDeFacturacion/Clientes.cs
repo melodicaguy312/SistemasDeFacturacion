@@ -4,7 +4,6 @@ namespace SistemaDeFacturacion;
 public class Clientes
 {
     
-    // INSERTAR
     public static void Insertar(string nombre, string apellidos, string direccion, int? telefono, string mail)
     {
         using (var conexion = Conexion.Conectar())
@@ -66,6 +65,7 @@ public class Clientes
                     Console.ReadKey();
                 }
             }
+            Console.ReadKey();
         }
     }
     
@@ -110,6 +110,7 @@ public class Clientes
                 Console.WriteLine("Introduzca cualquier letra para salir del listado.");
                 Console.ReadKey(true);
             }
+            Console.ReadKey();
         }
     }
 
@@ -174,6 +175,7 @@ public class Clientes
                     }
                 }
             }
+            Console.ReadKey();
         }
     }
     
@@ -215,6 +217,7 @@ public class Clientes
                         Console.WriteLine($"No se ha encontrado ningun cliente con el ID: {id}");
                     }
                 }
+                Console.ReadKey();
             }
         }
     }
@@ -232,13 +235,16 @@ public class Clientes
 
                 using (var reader = comando.ExecuteReader())
                 {
-                    if (reader.Read())
+                    bool centinela = false;
+    
+                    while (reader.Read())
                     {
+                        centinela = true;
+        
                         id_factura = reader.GetInt32(0);
                         codigo_factura = reader.GetString(1);
                         fecha = reader.GetString(2);
-                        
-                        
+        
                         Console.WriteLine();
                         Console.WriteLine("--- FACTURAS ASOCIADAS DE CLIENTE ENCONTRADAS ---");
                         Console.WriteLine($"{"ID:",-12} {id_factura}");
@@ -246,12 +252,14 @@ public class Clientes
                         Console.WriteLine($"{"Fecha:",-12} {fecha}");
                         Console.WriteLine("--------------------------");
                     }
-                    else
+    
+                    if (!centinela)
                     {
                         Console.WriteLine();
                         Console.WriteLine($"No se ha encontrado ninguna factura asociada con el cliente con el ID: {id_cliente}");
                     }
                 }
+                Console.ReadKey();
             }
         }
     }

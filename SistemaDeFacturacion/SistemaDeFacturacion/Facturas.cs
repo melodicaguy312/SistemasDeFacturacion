@@ -54,11 +54,12 @@ public class Facturas
             
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = $"UPDATE lineas_factura SET {columna} = @valor WHERE id_factura = @id_factura;";
+            string cadenaSQL = $"UPDATE lineas_factura SET {columna} = @valor WHERE id_factura = @id_factura AND num_linea = @id_linea;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@valor", valor);
                 comando.Parameters.AddWithValue("@id_factura", id_factura);
+                comando.Parameters.AddWithValue("@id_linea", id_linea);
                 
                 
                 int filasActualizadas = comando.ExecuteNonQuery();
@@ -73,13 +74,14 @@ public class Facturas
                     Console.ReadKey();
                 }
             }
+            Console.ReadKey();
         }
     }
     public static void MostrarTodos()
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = "SELECT * FROM factura";
+            string cadenaSQL = "SELECT * FROM facturas";
             string cabecera = $"{"ID Factura",-4} | {"Codigo Factura",-20} | {"Fecha",-20} | {"ID Cliente"} \n";
             int contador = 0;
             
@@ -114,10 +116,11 @@ public class Facturas
                 Console.WriteLine("Introduzca cualquier letra para salir del listado.");
                 Console.ReadKey(true);
             }
+            Console.ReadKey();
         }
     }
 
-    public static void Eliminar()
+    public static void Eliminar(int id)
     {
         using (var conexion = Conexion.Conectar())
         {
@@ -133,7 +136,7 @@ public class Facturas
             if (vecesAsociado > 0)
             {
                 Console.WriteLine();
-                Console.WriteLine($"ERROR: El producto no se puede eliminado porque está en {vecesAsociado} lineas de la factura.");
+                Console.WriteLine($"ERROR: El producto no se puede eliminar porque está en {vecesAsociado} lineas de la factura.");
                 return;
             }
             
@@ -163,6 +166,30 @@ public class Facturas
                     Console.WriteLine("No se encontró ningún producto con ese ID.");
                 }
             }
+            Console.ReadKey();
+        }
+    }
+    
+    public static void ModificarCabecera(int idFactura, string nuevaFecha, int nuevoIdCliente)
+    {
+        using (var conexion = Conexion.Conectar())
+        {
+            // 1. Extraer el año de la nueva fecha
+            DateTime fecha = DateTime.Parse(nuevaFecha);
+            string nuevoAño = fecha.Year.ToString();
+        
+            string nuevoCodigo = $"{idFactura}/{nuevoAño}";
+
+            string cadenaSQL = "UPDATE facturas SET codigo_factura = @cod, fecha = @fecha, id_cliente = @idCliente WHERE id_factura = @idFactura";
+            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            {
+                comando.Parameters.AddWithValue("@cod", nuevoCodigo);
+                comando.Parameters.AddWithValue("@fecha", nuevaFecha);
+                comando.Parameters.AddWithValue("@idCliente", nuevoIdCliente);
+                comando.Parameters.AddWithValue("@idFactura", idFactura);
+                comando.ExecuteNonQuery();
+            }
+            Console.ReadKey();
         }
     }
 }

@@ -1,20 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "jOASqN0/CiM=",
+  "dgSpecHash": "lf4p8m/Za+U=",
   "success": true,
-  "projectFilePath": "C:\\Users\\dam.A14PC43\\Documents\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj",
+  "projectFilePath": "C:\\Users\\Usuario\\Documents\\GitHub\\SistemasDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion\\SistemaDeFacturacion.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\microsoft.data.sqlite\\11.0.0-preview.3.26207.106\\microsoft.data.sqlite.11.0.0-preview.3.26207.106.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\microsoft.data.sqlite.core\\11.0.0-preview.3.26207.106\\microsoft.data.sqlite.core.11.0.0-preview.3.26207.106.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\mysqlconnector\\2.5.0\\mysqlconnector.2.5.0.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\sourcegear.sqlite3\\3.50.4.2\\sourcegear.sqlite3.3.50.4.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\3.0.2\\sqlitepclraw.bundle_e_sqlite3.3.0.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\sqlitepclraw.config.e_sqlite3\\3.0.2\\sqlitepclraw.config.e_sqlite3.3.0.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\sqlitepclraw.core\\3.0.2\\sqlitepclraw.core.3.0.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\3.0.2\\sqlitepclraw.provider.e_sqlite3.3.0.2.nupkg.sha512",
-    "C:\\Users\\dam.A14PC43\\.nuget\\packages\\system.memory\\4.6.3\\system.memory.4.6.3.nupkg.sha512"
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.data.sqlite\\11.0.0-preview.3.26207.106\\microsoft.data.sqlite.11.0.0-preview.3.26207.106.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.data.sqlite.core\\11.0.0-preview.3.26207.106\\microsoft.data.sqlite.core.11.0.0-preview.3.26207.106.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\mysqlconnector\\2.5.0\\mysqlconnector.2.5.0.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\sourcegear.sqlite3\\3.50.4.2\\sourcegear.sqlite3.3.50.4.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\3.0.2\\sqlitepclraw.bundle_e_sqlite3.3.0.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\sqlitepclraw.config.e_sqlite3\\3.0.2\\sqlitepclraw.config.e_sqlite3.3.0.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\sqlitepclraw.core\\3.0.2\\sqlitepclraw.core.3.0.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\3.0.2\\sqlitepclraw.provider.e_sqlite3.3.0.2.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\system.memory\\4.6.3\\system.memory.4.6.3.nupkg.sha512"
   ],
   "logs": []
 }
