@@ -106,10 +106,9 @@ public class Clientes
                         if (opcion == "s") break;
                     }
                 }
-                Console.WriteLine();
-                Console.WriteLine("Introduzca cualquier letra para salir del listado.");
-                Console.ReadKey(true);
             }
+            Console.WriteLine();
+            Console.WriteLine("No hay más páginas. Presione cualquier letra para salir de la lista.");
             Console.ReadKey();
         }
     }
@@ -247,7 +246,7 @@ public class Clientes
         
                         Console.WriteLine();
                         Console.WriteLine("--- FACTURAS ASOCIADAS DE CLIENTE ENCONTRADAS ---");
-                        Console.WriteLine($"{"ID:",-12} {id_factura}");
+                        Console.WriteLine($"{"ID Factura:",-12} {id_factura}");
                         Console.WriteLine($"{"Codigo Factura:",-12} {codigo_factura}");
                         Console.WriteLine($"{"Fecha:",-12} {fecha}");
                         Console.WriteLine("--------------------------");

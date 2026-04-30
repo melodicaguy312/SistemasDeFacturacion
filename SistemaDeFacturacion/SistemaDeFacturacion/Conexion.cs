@@ -4,14 +4,12 @@ namespace SistemaDeFacturacion;
 
 public class Conexion
 {
+    public static string CadenaConexion { get; set; } = "";
+
     public static SqliteConnection Conectar()
     {
-        string ruta = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "bbdd", "tienda.db");
-        string connString = $"Data Source={ruta}";
-        SqliteConnection conn = new SqliteConnection(connString);
-        
+        SqliteConnection conn = new SqliteConnection(CadenaConexion);
         conn.Open();
-        Console.WriteLine("Conexión abierta en: " + ruta + "\n");
         return conn;
     }
 }

@@ -77,6 +77,11 @@ public class Facturas
             Console.ReadKey();
         }
     }
+
+    public static void VisualizarFactura()
+    {
+        // hacer
+    }
     public static void MostrarTodos()
     {
         using (var conexion = Conexion.Conectar())

@@ -4,6 +4,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        Configuracion config = Configuracion.Cargar("config.json");
+        Conexion.CadenaConexion = config.CadenaConexion;
         string entrada;
         bool salir_principal = false;
 
@@ -87,10 +89,24 @@ class Program
                                         Clientes.MostrarTodos();
                                         break;
                                     case 5:
+                                        Console.Clear();
+                                        Clientes clienteMostrarPorId = new Clientes();
+                                        int id_MostrarClientePorId;
                                         
+                                        Console.Write("ID del cliente para mostrar sus datos: ");
+                                        id_MostrarClientePorId = Convert.ToInt32(Console.ReadLine());
+                                        
+                                        Clientes.BuscarClientePorId(id_MostrarClientePorId);
                                         break;
                                     case 6:
+                                        Console.Clear();
+                                        Clientes clienteMostrarFacturas = new Clientes();
+                                        int id_MostrarFacturasCliente;
                                         
+                                        Console.Write("ID del cliente para mostrar sus datos: ");
+                                        id_MostrarFacturasCliente = Convert.ToInt32(Console.ReadLine());
+                                        
+                                        Clientes.FacturasAsociadasAClientePorId(id_MostrarFacturasCliente);
                                         break;
                                     case 0:
                                         salir_cliente = true;
@@ -107,24 +123,95 @@ class Program
                         while (!salir_productos)
                         {
                             Menu.Menu_Productos();
-                            //Console.SetCursorPosition(8, 11);
                             entrada_productos = Console.ReadLine();
                             if (int.TryParse(entrada_productos, out int opcion_producto))
                             {
                                 switch (opcion_producto)
                                 {
                                     case 1:
+                                        Console.Clear();
+                                        string nombre_insertar_p;
+                                        double precio_insertar_p;
+
+                                        Console.Write("Nombre del producto: ");
+                                        nombre_insertar_p = Console.ReadLine();
+                                        Console.Write("Precio unitario: ");
+                                        while (!double.TryParse(Console.ReadLine(), out precio_insertar_p))
+                                        {
+                                            Console.WriteLine("Precio no válido. Inténtelo de nuevo: ");
+                                        }
+
+                                        Productos.Insertar(nombre_insertar_p, precio_insertar_p);
+                                        Console.ReadKey();
                                         break;
+
                                     case 2:
+                                        Console.Clear();
+                                        string columna_modificar_p, valor_modificar_p;
+                                        int id_modificar_p;
+
+                                        Console.Write("Columna (nombre_producto, precio_unitario): ");
+                                        columna_modificar_p = Console.ReadLine();
+                                        Console.Write("Valor nuevo: ");
+                                        valor_modificar_p = Console.ReadLine();
+                                        Console.Write("ID del producto a modificar: ");
+                                        while (!int.TryParse(Console.ReadLine(), out id_modificar_p))
+                                        {
+                                            Console.WriteLine("ID no válido. Inténtelo de nuevo: ");
+                                        }
+
+                                        Productos.Modificar(columna_modificar_p, valor_modificar_p, id_modificar_p);
+                                        Console.ReadKey();
                                         break;
+
                                     case 3:
+                                        Console.Clear();
+                                        int id_eliminar_p;
+
+                                        Console.Write("ID del producto a eliminar: ");
+                                        while (!int.TryParse(Console.ReadLine(), out id_eliminar_p))
+                                        {
+                                            Console.WriteLine("ID no válido. Inténtelo de nuevo: ");
+                                        }
+
+                                        Productos.Eliminar(id_eliminar_p);
+                                        Console.ReadKey();
                                         break;
+
                                     case 4:
+                                        Console.Clear();
+                                        Productos.MostrarTodos();
+                                        Console.ReadKey();
                                         break;
+
                                     case 5:
+                                        Console.Clear();
+                                        int id_buscar_p;
+
+                                        Console.Write("ID del producto a buscar: ");
+                                        while (!int.TryParse(Console.ReadLine(), out id_buscar_p))
+                                        {
+                                            Console.WriteLine("ID no válido. Inténtelo de nuevo: ");
+                                        }
+
+                                        Productos.BuscarProductoPorId(id_buscar_p);
+                                        Console.ReadKey();
                                         break;
+
                                     case 6:
+                                        Console.Clear();
+                                        int id_vendidos_p;
+
+                                        Console.Write("ID del producto para ver unidades vendidas: ");
+                                        while (!int.TryParse(Console.ReadLine(), out id_vendidos_p))
+                                        {
+                                            Console.WriteLine("ID no válido. Inténtelo de nuevo: ");
+                                        }
+
+                                        Productos.TotalArticulosVendidosPorCodigo(id_vendidos_p);
+                                        Console.ReadKey();
                                         break;
+
                                     case 0:
                                         salir_productos = true;
                                         break;
@@ -158,6 +245,7 @@ class Program
                                     case 3:
                                         break;
                                     case 4:
+                                        Facturas facturasVisualizar = new Facturas();
                                         break;
                                     case 0:
                                         salir_facturas = true;

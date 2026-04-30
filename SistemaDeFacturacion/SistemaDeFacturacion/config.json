@@ -1,0 +1,6 @@
+{
+  "NombreEmpresa": "TECH X",
+  "CIF": "K223784609",
+  "IVA": 21,
+  "CadenaConexion": "Data Source=bbdd/tienda.db"
+}
