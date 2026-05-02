@@ -1,18 +1,19 @@
-﻿namespace SistemaDeFacturacion;
+﻿using Microsoft.Data.Sqlite;
+using System;
+
+namespace SistemaDeFacturacion;
 
 class Program
 {
     static void Main(string[] args)
     {
         Configuracion config = Configuracion.Cargar("config.json");
-        Conexion.CadenaConexion = config.CadenaConexion;
         string entrada;
         bool salir_principal = false;
 
         while (!salir_principal)
         {
             Menu.Menu_Principal();
-            //Console.SetCursorPosition(8, 10);
             entrada = Console.ReadLine();
 
             if (int.TryParse(entrada, out int opcion))
@@ -27,7 +28,6 @@ class Program
                         while (!salir_cliente)
                         {
                             Menu.Menu_Cliente();
-                            //Console.SetCursorPosition(8, 11);
                             entrada_cliente = Console.ReadLine();
 
                             if (int.TryParse(entrada_cliente, out int opcion_cliente))
@@ -238,19 +238,147 @@ class Program
                             {
                                 switch (opcion_facturas)
                                 {
-                                    case 1:
+                                    case 1: // Alta de factura (solo cabecera)
+                                        Console.Clear();
+                                        Console.Write("ID del cliente: ");
+                                        if (!int.TryParse(Console.ReadLine(), out int id_cliente))
+                                        {
+                                            Console.WriteLine("ID de cliente no válido.");
+                                            Console.ReadKey();
+                                            break;
+                                        }
+
+                                        Console.Write("Fecha de la factura (yyyy-MM-dd) [Enter para hoy]: ");
+                                        string fecha_str = Console.ReadLine().Trim();
+                                        if (string.IsNullOrWhiteSpace(fecha_str))
+                                        {
+                                            fecha_str = DateTime.Now.ToString("yyyy-MM-dd");
+                                        }
+
+                                        DateTime fechaFactura;
+                                        if (!DateTime.TryParse(fecha_str, out fechaFactura))
+                                        {
+                                            fechaFactura = DateTime.Now;
+                                        }
+
+                                        int id_factura = 0;
+                                        string codigo_factura = "";
+
+                                        using (var conexion = Conexion.Conectar())
+                                        {
+                                            // Insertar cabecera de factura
+                                            string sqlInsert = "INSERT INTO facturas (id_cliente, fecha) VALUES (@id_cliente, @fecha)";
+                                            using (var cmd = new SqliteCommand(sqlInsert, conexion))
+                                            {
+                                                cmd.Parameters.AddWithValue("@id_cliente", id_cliente);
+                                                cmd.Parameters.AddWithValue("@fecha", fechaFactura.ToString("yyyy-MM-dd"));
+                                                cmd.ExecuteNonQuery();
+                                            }
+
+                                            // Obtener el ID generado (SQLite AUTOINCREMENT)
+                                            using (var cmdId = new SqliteCommand("SELECT last_insert_rowid();", conexion))
+                                            {
+                                                id_factura = Convert.ToInt32(cmdId.ExecuteScalar());
+                                            }
+
+                                            // Generar código de factura (ID/Año)
+                                            codigo_factura = $"{id_factura}/{fechaFactura.Year}";
+
+                                            // Actualizar código
+                                            string sqlUpdate = "UPDATE facturas SET codigo_factura = @codigo WHERE id_factura = @id_factura";
+                                            using (var cmdUpdate = new SqliteCommand(sqlUpdate, conexion))
+                                            {
+                                                cmdUpdate.Parameters.AddWithValue("@codigo", codigo_factura);
+                                                cmdUpdate.Parameters.AddWithValue("@id_factura", id_factura);
+                                                cmdUpdate.ExecuteNonQuery();
+                                            }
+                                        }
+
+                                        Console.WriteLine();
+                                        Console.WriteLine($"Factura creada correctamente. ID: {id_factura} - Código: {codigo_factura}");
+                                        Console.WriteLine("Nota: Las líneas de factura se gestionarán en futuras versiones.");
+                                        Console.ReadKey();
                                         break;
-                                    case 2:
+
+                                    case 2: // Modificar factura → submenú
+                                        bool salirModificar = false;
+                                        while (!salirModificar)
+                                        {
+                                            Menu.Menu_FacturasModificar();
+                                            string entradaModificar = Console.ReadLine();
+
+                                            if (int.TryParse(entradaModificar, out int opcionModificar))
+                                            {
+                                                switch (opcionModificar)
+                                                {
+                                                    case 1: // Modificar línea de factura
+                                                        Facturas.ModificarLineaFactura();
+                                                        break;
+                                                    case 2: // Modificar cabecera de factura
+                                                        Facturas.ModificarCabeceraFactura();
+                                                        break;
+                                                    case 0:
+                                                        salirModificar = true;
+                                                        break;
+                                                    default:
+                                                        Console.WriteLine("Opción inválida.");
+                                                        Console.ReadKey(true);
+                                                        break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Console.Clear();
+                                                Console.WriteLine("Opción inválida. Por favor, escriba un número válido del menú.");
+                                                Console.ReadKey(true);
+                                            }
+                                            Console.Clear();
+                                        }
                                         break;
+
                                     case 3:
+                                        Console.Clear();
+                                        Console.Write("ID de la factura a eliminar: ");
+                                        if (int.TryParse(Console.ReadLine(), out int idEliminar))
+                                        {
+                                            Facturas.Eliminar(idEliminar);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("ID no válido.");
+                                            Console.ReadKey();
+                                        }
                                         break;
+
                                     case 4:
-                                        Facturas facturasVisualizar = new Facturas();
+                                        Console.Clear();
+                                        Console.Write("ID de la factura a visualizar: ");
+                                        if (int.TryParse(Console.ReadLine(), out int idFactura))
+                                        {
+                                            Facturas.VisualizarFactura(idFactura);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("ID no válido");
+                                            Console.ReadKey();
+                                        }
                                         break;
+
                                     case 0:
                                         salir_facturas = true;
                                         break;
+
+                                    default:
+                                        Console.WriteLine("Opción inválida.");
+                                        break;
                                 }
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Opción inválida. Por favor, escriba un número válido del menú. \n");
+                                Console.WriteLine("Presione cualquier tecla para volver a intentar.");
+                                Console.ReadKey(true);
                             }
                         }
                         break;

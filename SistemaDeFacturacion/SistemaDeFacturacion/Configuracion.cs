@@ -9,6 +9,8 @@ public class Configuracion
     public string CIF            { get; set; } = "";
     public double IVA            { get; set; } = 21;
     public string CadenaConexion { get; set; } = "";
+    
+    public static Configuracion Ultima = new Configuracion();
 
     public static Configuracion Cargar(string ruta)
     {
@@ -22,6 +24,7 @@ public class Configuracion
         {
             string contenido = File.ReadAllText(ruta);
             Configuracion config = JsonSerializer.Deserialize<Configuracion>(contenido);
+            Ultima = config;
             Console.WriteLine("Configuración cargada correctamente.");
             return config;
         }

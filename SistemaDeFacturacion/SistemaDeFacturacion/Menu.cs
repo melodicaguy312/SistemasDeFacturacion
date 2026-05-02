@@ -57,6 +57,21 @@ public class Menu
         Console.Write("Opción: ");
 
     }
+
+    public static void Menu_FacturasModificar()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("########");
+        Console.WriteLine("Modificar Facturas");
+        Console.WriteLine("########");
+        Console.ResetColor();
+        Console.WriteLine("1 - Modificar linea de factura");
+        Console.WriteLine("2 - Modificar cabecera de factura");
+        Console.WriteLine("0 - Salir");
+        Console.WriteLine("##############################");
+        Console.Write("Opción: ");
+    }
     
     public static void Menu_Principal()
     {

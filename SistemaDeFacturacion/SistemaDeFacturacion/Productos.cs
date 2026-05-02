@@ -95,7 +95,8 @@ public class Productos
     {
         using (var conexion = Conexion.Conectar())
         {
-            string sqlContar = "SELECT COUNT(*) FROM lineas_factura WHERE cod_producto = @id;";;
+            // Comprobar si el producto está siendo usado en alguna factura
+            string sqlContar = "SELECT COUNT(*) FROM lineas_factura WHERE codigo_producto = @id;";
             int vecesAsociado = 0;
 
             using (var comandoContar = new SqliteCommand(sqlContar, conexion))
@@ -103,30 +104,31 @@ public class Productos
                 comandoContar.Parameters.AddWithValue("@id", id);
                 vecesAsociado = Convert.ToInt32(comandoContar.ExecuteScalar());
             }
-            
+        
             if (vecesAsociado > 0)
             {
                 Console.WriteLine();
-                Console.WriteLine($"ERROR: El producto no se puede eliminado porque está en {vecesAsociado} lineas de la factura.");
+                Console.WriteLine($"ERROR: El producto no se puede eliminar porque está en {vecesAsociado} líneas de factura.");
+                Console.ReadKey();
                 return;
             }
-            
+        
             Console.WriteLine();
             Console.WriteLine($"¿Estás seguro de que deseas eliminar el producto con ID {id}? (s/n): ");
-            string respuesta = Console.ReadLine().ToLower();
+            string respuesta = Console.ReadLine()?.ToLower();
 
             if (respuesta != "s")
             {
                 Console.WriteLine("Cancelado.");
+                Console.ReadKey();
                 return;
             }
-
 
             string cadenaSQL = "DELETE FROM productos WHERE codigo_producto = @id;";
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@id", id);
-            
+        
                 int filasActualizadas = comando.ExecuteNonQuery();
                 if (filasActualizadas > 0)
                 {
@@ -137,6 +139,7 @@ public class Productos
                     Console.WriteLine("No se encontró ningún producto con ese ID.");
                 }
             }
+            Console.ReadKey();
         }
     }
     
@@ -182,7 +185,7 @@ public class Productos
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = "SELECT SUM(cantidad) FROM lineas_factura WHERE cod_producto = @codigo_producto;";
+            string cadenaSQL = "SELECT SUM(cantidad) FROM lineas_factura WHERE codigo_producto = @codigo_producto;";
         
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {

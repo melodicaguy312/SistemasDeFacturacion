@@ -3,38 +3,46 @@ namespace SistemaDeFacturacion;
 
 public class Lineas_Factura
 {
-    public static void Insertar(int id_factura, int codigo_producto, int cantidad)
+    public static void Insertar(int id_factura, int cod_producto, int cantidad)
     {
         using (var conexion = Conexion.Conectar())
         {
-            string sqlPrecio = "SELECT precio_unitario FROM productos WHERE codigo_producto = @cod_prod";
-            double precio_unitario = 0;
-
-            using (var cmdPrecio = new SqliteCommand(sqlPrecio, conexion))
+            int id_linea = 1;
+            string sqlIdLinea = "SELECT COALESCE(MAX(id_linea), 0) + 1 FROM lineas_factura WHERE id_factura = @id_factura";
+            using (var comando = new SqliteCommand(sqlIdLinea, conexion))
             {
-                cmdPrecio.Parameters.AddWithValue("@cod_prod", codigo_producto);
-                var resultado = cmdPrecio.ExecuteScalar();
-                if (resultado != null)
-                {
-                    precio_unitario = Convert.ToDouble(resultado);
-                }
+                comando.Parameters.AddWithValue("@id_factura", id_factura);
+                id_linea = Convert.ToInt32(comando.ExecuteScalar());
             }
+
+            // Obtener precio unitario del producto
+            double precio_unitario = 0;
+            string sqlPrecio = "SELECT precio_unitario FROM productos WHERE codigo_producto = @cod_prod";
+            using (var comando = new SqliteCommand(sqlPrecio, conexion))
+            {
+                comando.Parameters.AddWithValue("@cod_prod", cod_producto);
+                var resultado = comando.ExecuteScalar();
+                if (resultado != null)
+                    precio_unitario = Convert.ToDouble(resultado);
+            }
+
             double precio_total = precio_unitario * cantidad;
 
-            string cadenaSQL = "INSERT INTO lineas_factura (id_factura, codigo_producto, precio_unitario, cantidad, precio_total) VALUES (@id_factura, @cod_prod, @precio_u, @cant, @precio_t)";
-            
+            string cadenaSQL = @"INSERT INTO lineas_factura (id_factura, id_linea, cod_producto, precio_unitario, cantidad, precio_total) VALUES (@id_factura, @id_linea, @cod_prod, @precio_u, @cant, @precio_t)";
+
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
                 comando.Parameters.AddWithValue("@id_factura", id_factura);
-                comando.Parameters.AddWithValue("@cod_prod", codigo_producto);
+                comando.Parameters.AddWithValue("@id_linea", id_linea);
+                comando.Parameters.AddWithValue("@cod_prod", cod_producto);
                 comando.Parameters.AddWithValue("@precio_u", precio_unitario);
                 comando.Parameters.AddWithValue("@cant", cantidad);
                 comando.Parameters.AddWithValue("@precio_t", precio_total);
-                
+
                 comando.ExecuteNonQuery();
             }
             Console.WriteLine();
-            Console.WriteLine("Línea de factura añadida correctamente.");
+            Console.WriteLine($"Línea {id_linea} añadida correctamente.");
             Console.ReadKey();
         }
     }
@@ -43,8 +51,8 @@ public class Lineas_Factura
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = "SELECT id_linea, id_factura, codigo_producto, precio_unitario, cantidad, precio_total FROM lineas_factura WHERE id_factura = @id_factura";
-            int id_linea, codigo_producto, cantidad;
+            string cadenaSQL = @"SELECT id_linea, id_factura, cod_producto, precio_unitario, cantidad, precio_total FROM lineas_factura WHERE id_factura = @id_factura";
+            int id_linea, cod_producto, cantidad;
             double precio_unitario, precio_total;
 
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
@@ -59,21 +67,21 @@ public class Lineas_Factura
                     {
                         centinela = true;
 
-                        id_linea = reader.GetInt32(0);
-                        codigo_producto = reader.GetInt32(2);
+                        id_linea       = reader.GetInt32(0);
+                        cod_producto   = reader.GetInt32(2);
                         precio_unitario = reader.GetDouble(3);
-                        cantidad = reader.GetInt32(4);
-                        precio_total = reader.GetDouble(5);
+                        cantidad       = reader.GetInt32(4);
+                        precio_total   = reader.GetDouble(5);
 
                         Console.WriteLine();
-                        Console.WriteLine("--- LÍNEA DE FACTURA ENCONTRADA ---");
-                        Console.WriteLine($"{"ID Línea:",-12} {id_linea}");
-                        Console.WriteLine($"{"ID Factura:",-12} {id_factura}");
-                        Console.WriteLine($"{"Producto:",-12} {codigo_producto}");
-                        Console.WriteLine($"{"Precio Un.:",-12} {precio_unitario}€");
-                        Console.WriteLine($"{"Cantidad:",-12} {cantidad}");
-                        Console.WriteLine($"{"Precio Total:",-12} {precio_total}€");
-                        Console.WriteLine("--------------------------");
+                        Console.WriteLine("--- LÍNEA DE FACTURA ---");
+                        Console.WriteLine($"{"ID Línea:",-16} {id_linea}");
+                        Console.WriteLine($"{"ID Factura:",-16} {id_factura}");
+                        Console.WriteLine($"{"Cód. Producto:",-16} {cod_producto}");
+                        Console.WriteLine($"{"Precio Unit.:",-16} {precio_unitario} €");
+                        Console.WriteLine($"{"Cantidad:",-16} {cantidad}");
+                        Console.WriteLine($"{"Precio Total:",-16} {precio_total} €");
+                        Console.WriteLine("------------------------");
                     }
 
                     if (!centinela)
@@ -96,9 +104,7 @@ public class Lineas_Factura
             {
                 comando.Parameters.AddWithValue("@id_fact", id_factura);
                 comando.Parameters.AddWithValue("@id_lin", id_linea);
-                int existe = Convert.ToInt32(comando.ExecuteScalar());
-
-                if (existe == 0)
+                if (Convert.ToInt32(comando.ExecuteScalar()) == 0)
                 {
                     Console.WriteLine();
                     Console.WriteLine($"No existe la línea {id_linea} en la factura {id_factura}.");
@@ -108,7 +114,7 @@ public class Lineas_Factura
             }
 
             Console.WriteLine();
-            Console.WriteLine($"¿Seguro que desea eliminar la línea {id_linea} de la factura {id_factura}? (s/n)");
+            Console.Write($"¿Seguro que desea eliminar la línea {id_linea} de la factura {id_factura}? (s/n): ");
             string respuesta = Console.ReadLine().ToLower();
 
             if (respuesta == "s")
