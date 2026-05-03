@@ -28,7 +28,7 @@ public class Lineas_Factura
 
             double precio_total = precio_unitario * cantidad;
 
-            string cadenaSQL = @"INSERT INTO lineas_factura (id_factura, id_linea, cod_producto, precio_unitario, cantidad, precio_total) VALUES (@id_factura, @id_linea, @cod_prod, @precio_u, @cant, @precio_t)";
+            string cadenaSQL = @"INSERT INTO lineas_factura (id_factura, id_linea, codigo_producto, precio_unitario, cantidad, precio_total) VALUES (@id_factura, @id_linea, @cod_prod, @precio_u, @cant, @precio_t)";
 
             using (var comando = new SqliteCommand(cadenaSQL, conexion))
             {
@@ -51,7 +51,7 @@ public class Lineas_Factura
     {
         using (var conexion = Conexion.Conectar())
         {
-            string cadenaSQL = @"SELECT id_linea, id_factura, cod_producto, precio_unitario, cantidad, precio_total FROM lineas_factura WHERE id_factura = @id_factura";
+            string cadenaSQL = @"SELECT id_linea, id_factura, codigo_producto, precio_unitario, cantidad, precio_total FROM lineas_factura WHERE id_factura = @id_factura";
             int id_linea, cod_producto, cantidad;
             double precio_unitario, precio_total;
 
@@ -61,11 +61,11 @@ public class Lineas_Factura
 
                 using (var reader = comando.ExecuteReader())
                 {
-                    bool centinela = false;
+                    bool hayLineas = false;
 
                     while (reader.Read())
                     {
-                        centinela = true;
+                        hayLineas = true;
 
                         id_linea       = reader.GetInt32(0);
                         cod_producto   = reader.GetInt32(2);
@@ -84,7 +84,7 @@ public class Lineas_Factura
                         Console.WriteLine("------------------------");
                     }
 
-                    if (!centinela)
+                    if (!hayLineas)
                     {
                         Console.WriteLine();
                         Console.WriteLine($"No se han encontrado líneas para la factura con ID: {id_factura}");

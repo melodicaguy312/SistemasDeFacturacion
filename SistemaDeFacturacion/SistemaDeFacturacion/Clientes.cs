@@ -234,11 +234,11 @@ public class Clientes
 
                 using (var reader = comando.ExecuteReader())
                 {
-                    bool centinela = false;
+                    bool hayLineas = false;
 
                     while (reader.Read())
                     {
-                        centinela = true;
+                        hayLineas = true;
                         id_factura = reader.GetInt32(0);
                         codigo_factura = reader.GetString(1);
                         fecha = reader.GetString(2);
@@ -251,7 +251,7 @@ public class Clientes
                         Console.WriteLine("------------------------");
                     }
 
-                    if (!centinela)
+                    if (!hayLineas)
                     {
                         Console.WriteLine();
                         Console.WriteLine($"No se ha encontrado ninguna factura para el cliente con ID: {id_cliente}");

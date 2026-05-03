@@ -256,12 +256,12 @@ public class Facturas
                     return;
                 }
                 codigo_factura = reader.GetString(1);
-                fecha          = reader.GetString(2);
-                nombre         = reader.IsDBNull(3) ? "" : reader.GetString(3);
-                apellidos      = reader.IsDBNull(4) ? "" : reader.GetString(4);
-                direccion      = reader.IsDBNull(5) ? "" : reader.GetString(5);
+                fecha          = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                nombre         = reader.GetString(3);
+                apellidos      = reader.GetString(4);
+                direccion      = reader.GetString(5);
                 telefono       = reader.IsDBNull(6) ? "" : reader.GetString(6);
-                mail           = reader.IsDBNull(7) ? "" : reader.GetString(7);
+                mail           = reader.GetString(7);
             }
         }
 
@@ -269,6 +269,7 @@ public class Facturas
         Console.WriteLine();
         Console.WriteLine($"Empresa: {Configuracion.Ultima.NombreEmpresa}");
         Console.WriteLine($"CIF:     {Configuracion.Ultima.CIF}");
+        Console.WriteLine();
         Console.WriteLine($"Código Factura: {codigo_factura}");
         Console.WriteLine($"Fecha Factura:  {fecha}");
         Console.WriteLine($"Cliente:        {nombre} {apellidos}");
@@ -288,8 +289,8 @@ public class Facturas
         double baseImponible = 0;
         bool hayLineas = false;
 
-        Console.WriteLine($"{"Nº",-4} {"Cód.",-6} {"Artículo",-25} {"P. Unit.",-10} {"Cant.",-6} {"Precio"}");
-        Console.WriteLine(new string('-', 70));
+        Console.WriteLine($"{"Nº",-4} {"Cód.",-6} {"Artículo",-25} {"P. Unit.",-10} {"Cant.",-6} {"Precio",10}");
+        Console.WriteLine(new string('-', 65));
 
         using (var comando = new SqliteCommand(sqlLineas, conexion))
         {
@@ -308,7 +309,7 @@ public class Facturas
 
                     baseImponible += p_total;
 
-                    Console.WriteLine($"{id_linea,-4} {cod_prod,-6} {nom_prod,-25} {p_unit,-10:F2} {cant,-6} {p_total:F2}");
+                    Console.WriteLine($"{id_linea,-4} {cod_prod,-6} {nom_prod,-25} {p_unit,-10:F2} {cant,-6} {p_total,10:F2}");
                 }
             }
         }
@@ -322,10 +323,11 @@ public class Facturas
             double iva   = baseImponible * (Configuracion.Ultima.IVA / 100.0);
             double total = baseImponible + iva;
 
-            Console.WriteLine(new string('-', 70));
-            Console.WriteLine($"{"Base Imponible: ",-40} {baseImponible:F2} €");
-            Console.WriteLine($"{"IVA (" + Configuracion.Ultima.IVA + "%): ",-40} {iva:F2} €");
-            Console.WriteLine($"{"Total: ",-40} {total:F2} €");
+            Console.WriteLine(new string('-', 65));
+            Console.WriteLine();
+            Console.WriteLine($"{"Base Imponible:",-51} {baseImponible,14:F2} €");
+            Console.WriteLine($"{"IVA (" + Configuracion.Ultima.IVA + "%):",-51} {iva,14:F2} €");
+            Console.WriteLine($"{"Total:",-51} {total,14:F2} €");
         }
 
         Console.ReadKey();

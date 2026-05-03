@@ -7,7 +7,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        Configuracion config = Configuracion.Cargar("config.json");
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        string ruta = Path.Combine(AppContext.BaseDirectory, "config.json");
+        Configuracion config = Configuracion.Cargar(ruta);
         string entrada;
         bool salir_principal = false;
 
