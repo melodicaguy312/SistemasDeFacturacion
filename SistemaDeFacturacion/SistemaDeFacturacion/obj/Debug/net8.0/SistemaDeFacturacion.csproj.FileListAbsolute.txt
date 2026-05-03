@@ -418,3 +418,4 @@ C:\Users\dam.A14PC43\Documents\SistemasDeFacturacion\SistemaDeFacturacion\Sistem
 C:\Users\dam.A14PC43\Documents\SistemasDeFacturacion\SistemaDeFacturacion\SistemaDeFacturacion\obj\Debug\net8.0\SistemaDeFacturacion.genruntimeconfig.cache
 C:\Users\dam.A14PC43\Documents\SistemasDeFacturacion\SistemaDeFacturacion\SistemaDeFacturacion\obj\Debug\net8.0\ref\SistemaDeFacturacion.dll
 C:\Users\ismat\Documents\SistemasDeFacturacion\SistemaDeFacturacion\SistemaDeFacturacion\bin\Debug\net8.0\config.json
+C:\Users\Usuario\Documents\GitHub\SistemasDeFacturacion\SistemaDeFacturacion\SistemaDeFacturacion\bin\Debug\net8.0\config.json

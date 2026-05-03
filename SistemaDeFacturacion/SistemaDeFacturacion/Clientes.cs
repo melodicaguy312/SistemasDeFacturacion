@@ -1,31 +1,46 @@
 using Microsoft.Data.Sqlite;
+
 namespace SistemaDeFacturacion;
 
 public class Clientes
 {
     public static void Insertar(string nombre, string apellidos, string direccion, int? telefono, string mail)
     {
-        using (var conexion = Conexion.Conectar())
+        try
         {
-            string cadenaSQL = "INSERT INTO clientes(nombre, apellidos, direccion, telefono, mail) VALUES(@nombre, @apellidos, @direccion, @telefono, @mail);";
-
-            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            using (var conexion = Conexion.Conectar())
             {
-                comando.Parameters.AddWithValue("@nombre", nombre);
-                comando.Parameters.AddWithValue("@apellidos", apellidos);
-                comando.Parameters.AddWithValue("@direccion", direccion);
-                if (string.IsNullOrWhiteSpace(telefono.ToString()))
-                    comando.Parameters.AddWithValue("@telefono", DBNull.Value);
-                else
-                    comando.Parameters.AddWithValue("@telefono", telefono);
-                comando.Parameters.AddWithValue("@mail", mail);
+                string cadenaSQL = "INSERT INTO clientes(nombre, apellidos, direccion, telefono, mail) VALUES(@nombre, @apellidos, @direccion, @telefono, @mail);";
 
-                comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(cadenaSQL, conexion))
+                {
+                    comando.Parameters.AddWithValue("@nombre", nombre);
+                    comando.Parameters.AddWithValue("@apellidos", apellidos);
+                    comando.Parameters.AddWithValue("@direccion", direccion);
+                    if (string.IsNullOrWhiteSpace(telefono.ToString()))
+                        comando.Parameters.AddWithValue("@telefono", DBNull.Value);
+                    else
+                        comando.Parameters.AddWithValue("@telefono", telefono);
+                    comando.Parameters.AddWithValue("@mail", mail);
+
+                    comando.ExecuteNonQuery();
+                }
+                Console.WriteLine("\nCliente añadido correctamente.");
             }
-            Console.WriteLine();
-            Console.WriteLine("Cliente añadido correctamente.");
-            Console.ReadKey();
         }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine($"Error en SQLite: {ex.Message}");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error de argumento: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        Console.ReadKey();
     }
 
     public static void Modificar(string columna, string valor, int id)
@@ -39,226 +54,254 @@ public class Clientes
             return;
         }
 
-        using (var conexion = Conexion.Conectar())
+        try
         {
-            string cadenaSQL = $"UPDATE clientes SET {columna} = @valor WHERE id = @id;";
-            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            using (var conexion = Conexion.Conectar())
             {
-                comando.Parameters.AddWithValue("@valor", valor);
-                comando.Parameters.AddWithValue("@id", id);
+                string cadenaSQL = $"UPDATE clientes SET {columna} = @valor WHERE id = @id;";
+                using (var comando = new SqliteCommand(cadenaSQL, conexion))
+                {
+                    comando.Parameters.AddWithValue("@valor", valor);
+                    comando.Parameters.AddWithValue("@id", id);
 
-                int filasActualizadas = comando.ExecuteNonQuery();
-                if (filasActualizadas > 0)
-                    Console.WriteLine($"Cliente modificado correctamente. Filas afectadas: {filasActualizadas}.");
-                else
-                    Console.WriteLine("No se encontró ningún cliente con ese ID.");
+                    int filasActualizadas = comando.ExecuteNonQuery();
+                    if (filasActualizadas > 0)
+                        Console.WriteLine($"Cliente modificado correctamente. Filas afectadas: {filasActualizadas}.");
+                    else
+                        Console.WriteLine("No se encontró ningún cliente con ese ID.");
+                }
             }
-            Console.ReadKey();
         }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine($"Error en SQLite: {ex.Message}");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error de argumento: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        Console.ReadKey();
     }
 
     public static void MostrarTodos()
     {
-        using (var conexion = Conexion.Conectar())
+        try
         {
-            string cadenaSQL = "SELECT * FROM clientes";
-            string cabecera = $"{"ID",-4} | {"Nombre",-20} | {"Apellidos",-20} | {"Dirección",-30} | {"Teléfono",-20} | {"Mail",-20} \n";
-            int contador = 0;
-
-            Console.WriteLine(cabecera);
-
-            int id;
-            string nombre, apellidos, direccion, telefono, mail;
-
-            using (SqliteCommand comando = new SqliteCommand(cadenaSQL, conexion))
-            using (var reader = comando.ExecuteReader())
+            using (var conexion = Conexion.Conectar())
             {
-                while (reader.Read())
+                string cadenaSQL = "SELECT * FROM clientes";
+                string cabecera = $"{"ID",-4} | {"Nombre",-20} | {"Apellidos",-20} | {"Dirección",-30} | {"Teléfono",-20} | {"Mail",-20} \n";
+                int contador = 0;
+
+                Console.WriteLine(cabecera);
+
+                using (SqliteCommand comando = new SqliteCommand(cadenaSQL, conexion))
+                using (var reader = comando.ExecuteReader())
                 {
-                    id = reader.GetInt32(0);
-                    nombre = reader.GetString(1);
-                    apellidos = reader.GetString(2);
-                    direccion = reader.GetString(3);
-                    telefono = reader.IsDBNull(4) ? "" : reader.GetString(4);
-                    mail = reader.GetString(5);
-
-                    Console.WriteLine($"{id,-4} | {nombre,-20} | {apellidos,-20} | {direccion,-30} | {telefono,-20} | {mail,-20}");
-                    contador++;
-
-                    if (contador % 20 == 0)
+                    while (reader.Read())
                     {
-                        Console.WriteLine();
-                        Console.WriteLine("Introduzca cualquier letra para continuar o 's' para salir del listado.");
-                        string opcion = Console.ReadLine().ToLower();
-                        if (opcion == "s") break;
+                        int id = reader.GetInt32(0);
+                        string nombre = reader.GetString(1);
+                        string apellidos = reader.GetString(2);
+                        string direccion = reader.GetString(3);
+                        string telefono = reader.IsDBNull(4) ? "" : reader.GetString(4);
+                        string mail = reader.GetString(5);
+
+                        Console.WriteLine($"{id,-4} | {nombre,-20} | {apellidos,-20} | {direccion,-30} | {telefono,-20} | {mail,-20}");
+                        contador++;
+
+                        if (contador % 20 == 0)
+                        {
+                            Console.WriteLine("\nIntroduzca cualquier letra para continuar o 's' para salir del listado.");
+                            string opcion = Console.ReadLine()?.ToLower();
+                            if (opcion == "s") return;
+                        }
                     }
                 }
+                Console.WriteLine("\nNo hay más registros.");
             }
-            Console.WriteLine();
-            Console.WriteLine("No hay más páginas. Presione cualquier letra para salir de la lista.");
-            Console.ReadKey();
         }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine($"Error en SQLite: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        Console.ReadKey();
     }
 
     public static void Eliminar(int id)
     {
-        using (var conexion = Conexion.Conectar())
+        try
         {
-            // Comprobar que el cliente existe
-            string sqlExiste = "SELECT COUNT(*) FROM clientes WHERE id = @id;";
-            using (var comandoExiste = new SqliteCommand(sqlExiste, conexion))
+            using (var conexion = Conexion.Conectar())
             {
-                comandoExiste.Parameters.AddWithValue("@id", id);
-                if (Convert.ToInt32(comandoExiste.ExecuteScalar()) == 0)
+                // Verificar si existe el cliente
+                string sqlExiste = "SELECT COUNT(*) FROM clientes WHERE id = @id;";
+                using (var comandoExiste = new SqliteCommand(sqlExiste, conexion))
                 {
-                    Console.WriteLine($"No existe ningún cliente con ID {id}.");
+                    comandoExiste.Parameters.AddWithValue("@id", id);
+                    if (Convert.ToInt32(comandoExiste.ExecuteScalar()) == 0)
+                    {
+                        Console.WriteLine($"No existe ningún cliente con ID {id}.");
+                        Console.ReadKey(true);
+                        return;
+                    }
+                }
+
+                int totalFacturas = 0;
+                string sqlContar = "SELECT COUNT(*) FROM facturas WHERE id_cliente = @id;";
+                using (var comandoContar = new SqliteCommand(sqlContar, conexion))
+                {
+                    comandoContar.Parameters.AddWithValue("@id", id);
+                    totalFacturas = Convert.ToInt32(comandoContar.ExecuteScalar());
+                }
+
+                Console.WriteLine($"\nEl cliente con ID {id} tiene {totalFacturas} facturas asociadas.");
+                Console.Write("¿Estás seguro de que quieres eliminar al cliente y todas sus facturas? (s/n): ");
+                string respuesta = Console.ReadLine()?.ToLower();
+
+                if (respuesta != "s")
+                {
+                    Console.WriteLine("Operación cancelada.");
                     Console.ReadKey(true);
                     return;
                 }
-            }
 
-            // Contar facturas del cliente
-            int totalFacturas = 0;
-            string sqlContar = "SELECT COUNT(*) FROM facturas WHERE id_cliente = @id;";
-            using (var comandoContar = new SqliteCommand(sqlContar, conexion))
-            {
-                comandoContar.Parameters.AddWithValue("@id", id);
-                totalFacturas = Convert.ToInt32(comandoContar.ExecuteScalar());
-            }
-
-            Console.WriteLine();
-            Console.WriteLine($"El cliente con ID {id} tiene {totalFacturas} facturas asociadas.");
-            Console.Write("¿Estás seguro de que quieres eliminar al cliente y todas sus facturas? (s/n): ");
-            string respuesta = Console.ReadLine().ToLower();
-
-            if (respuesta != "s")
-            {
-                Console.WriteLine("Cancelado.");
-                Console.ReadKey(true);
-                return;
-            }
-
-            // 1. Borrar líneas de factura asociadas a las facturas del cliente
-            string sqlBorrarLineas = @"DELETE FROM lineas_factura 
-                                       WHERE id_factura IN (SELECT id_factura FROM facturas WHERE id_cliente = @id);";
-            using (var comando = new SqliteCommand(sqlBorrarLineas, conexion))
-            {
-                comando.Parameters.AddWithValue("@id", id);
-                comando.ExecuteNonQuery();
-            }
-
-            // 2. Borrar las facturas del cliente
-            string sqlBorrarFacturas = "DELETE FROM facturas WHERE id_cliente = @id;";
-            using (var comando = new SqliteCommand(sqlBorrarFacturas, conexion))
-            {
-                comando.Parameters.AddWithValue("@id", id);
-                comando.ExecuteNonQuery();
-            }
-
-            // 3. Borrar el cliente
-            string sqlBorrarCliente = "DELETE FROM clientes WHERE id = @id;";
-            using (var comando = new SqliteCommand(sqlBorrarCliente, conexion))
-            {
-                comando.Parameters.AddWithValue("@id", id);
-                int filas = comando.ExecuteNonQuery();
-                if (filas > 0)
+                // Borrar líneas de factura
+                string sqlBorrarLineas = @"DELETE FROM lineas_factura 
+                                           WHERE id_factura IN (SELECT id_factura FROM facturas WHERE id_cliente = @id);";
+                using (var comando = new SqliteCommand(sqlBorrarLineas, conexion))
                 {
-                    Console.WriteLine();
-                    Console.WriteLine($"Cliente eliminado correctamente.");
-                    Console.WriteLine($"Se eliminaron {totalFacturas} facturas y sus líneas asociadas.");
+                    comando.Parameters.AddWithValue("@id", id);
+                    comando.ExecuteNonQuery();
                 }
-                else
+
+                // Borrar facturas
+                string sqlBorrarFacturas = "DELETE FROM facturas WHERE id_cliente = @id;";
+                using (var comando = new SqliteCommand(sqlBorrarFacturas, conexion))
                 {
-                    Console.WriteLine("No se pudo eliminar el cliente.");
+                    comando.Parameters.AddWithValue("@id", id);
+                    comando.ExecuteNonQuery();
+                }
+
+                // Borrar cliente
+                string sqlBorrarCliente = "DELETE FROM clientes WHERE id = @id;";
+                using (var comando = new SqliteCommand(sqlBorrarCliente, conexion))
+                {
+                    comando.Parameters.AddWithValue("@id", id);
+                    int filas = comando.ExecuteNonQuery();
+                    if (filas > 0)
+                    {
+                        Console.WriteLine("\nCliente eliminado correctamente.");
+                        Console.WriteLine($"Se eliminaron {totalFacturas} facturas y sus líneas asociadas.");
+                    }
                 }
             }
-            Console.ReadKey(true);
         }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine($"Error en SQLite: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        Console.ReadKey(true);
     }
 
     public static void BuscarClientePorId(int id)
     {
-        using (var conexion = Conexion.Conectar())
+        try
         {
-            string cadenaSQL = "SELECT * FROM clientes WHERE id = @id";
-            int idCliente;
-            string nombre, apellidos, direccion, telefono, mail;
-
-            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            using (var conexion = Conexion.Conectar())
             {
-                comando.Parameters.AddWithValue("@id", id);
+                string cadenaSQL = "SELECT * FROM clientes WHERE id = @id";
 
-                using (var reader = comando.ExecuteReader())
+                using (var comando = new SqliteCommand(cadenaSQL, conexion))
                 {
-                    if (reader.Read())
-                    {
-                        idCliente = reader.GetInt32(0);
-                        nombre = reader.GetString(1);
-                        apellidos = reader.GetString(2);
-                        direccion = reader.GetString(3);
-                        telefono = reader.IsDBNull(4) ? "" : reader.GetString(4);
-                        mail = reader.GetString(5);
+                    comando.Parameters.AddWithValue("@id", id);
 
-                        Console.WriteLine();
-                        Console.WriteLine("--- CLIENTE ENCONTRADO ---");
-                        Console.WriteLine($"{"ID:",-12} {idCliente}");
-                        Console.WriteLine($"{"Nombre:",-12} {nombre}");
-                        Console.WriteLine($"{"Apellidos:",-12} {apellidos}");
-                        Console.WriteLine($"{"Dirección:",-12} {direccion}");
-                        Console.WriteLine($"{"Teléfono:",-12} {telefono}");
-                        Console.WriteLine($"{"Mail:",-12} {mail}");
-                        Console.WriteLine("--------------------------");
-                    }
-                    else
+                    using (var reader = comando.ExecuteReader())
                     {
-                        Console.WriteLine();
-                        Console.WriteLine($"No se ha encontrado ningún cliente con el ID: {id}");
+                        if (reader.Read())
+                        {
+                            Console.WriteLine("\n--- CLIENTE ENCONTRADO ---");
+                            Console.WriteLine($"{"ID:",-12} {reader.GetInt32(0)}");
+                            Console.WriteLine($"{"Nombre:",-12} {reader.GetString(1)}");
+                            Console.WriteLine($"{"Apellidos:",-12} {reader.GetString(2)}");
+                            Console.WriteLine($"{"Dirección:",-12} {reader.GetString(3)}");
+                            Console.WriteLine($"{"Teléfono:",-12} {(reader.IsDBNull(4) ? "" : reader.GetString(4))}");
+                            Console.WriteLine($"{"Mail:",-12} {reader.GetString(5)}");
+                            Console.WriteLine("--------------------------");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"\nNo se ha encontrado ningún cliente con el ID: {id}");
+                        }
                     }
                 }
-                Console.ReadKey();
             }
         }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine($"Error en SQLite: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        Console.ReadKey();
     }
 
     public static void FacturasAsociadasAClientePorId(int id_cliente)
     {
-        using (var conexion = Conexion.Conectar())
+        try
         {
-            string cadenaSQL = "SELECT id_factura, codigo_factura, fecha FROM facturas WHERE id_cliente = @id_cliente";
-            int id_factura;
-            string codigo_factura, fecha;
-
-            using (var comando = new SqliteCommand(cadenaSQL, conexion))
+            using (var conexion = Conexion.Conectar())
             {
-                comando.Parameters.AddWithValue("@id_cliente", id_cliente);
+                string cadenaSQL = "SELECT id_factura, codigo_factura, fecha FROM facturas WHERE id_cliente = @id_cliente";
 
-                using (var reader = comando.ExecuteReader())
+                using (var comando = new SqliteCommand(cadenaSQL, conexion))
                 {
-                    bool hayLineas = false;
+                    comando.Parameters.AddWithValue("@id_cliente", id_cliente);
 
-                    while (reader.Read())
+                    using (var reader = comando.ExecuteReader())
                     {
-                        hayLineas = true;
-                        id_factura = reader.GetInt32(0);
-                        codigo_factura = reader.GetString(1);
-                        fecha = reader.GetString(2);
+                        bool hayFacturas = false;
 
-                        Console.WriteLine();
-                        Console.WriteLine("--- FACTURA ASOCIADA ---");
-                        Console.WriteLine($"{"ID Factura:",-16} {id_factura}");
-                        Console.WriteLine($"{"Código Factura:",-16} {codigo_factura}");
-                        Console.WriteLine($"{"Fecha:",-16} {fecha}");
-                        Console.WriteLine("------------------------");
-                    }
+                        while (reader.Read())
+                        {
+                            hayFacturas = true;
+                            Console.WriteLine("\n--- FACTURA ASOCIADA ---");
+                            Console.WriteLine($"{"ID Factura:",-16} {reader.GetInt32(0)}");
+                            Console.WriteLine($"{"Código Factura:",-16} {reader.GetString(1)}");
+                            Console.WriteLine($"{"Fecha:",-16} {reader.GetString(2)}");
+                            Console.WriteLine("------------------------");
+                        }
 
-                    if (!hayLineas)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine($"No se ha encontrado ninguna factura para el cliente con ID: {id_cliente}");
+                        if (!hayFacturas)
+                        {
+                            Console.WriteLine($"\nNo se han encontrado facturas para el cliente con ID: {id_cliente}");
+                        }
                     }
                 }
-                Console.ReadKey();
             }
         }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine($"Error en SQLite: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        Console.ReadKey();
     }
 }
